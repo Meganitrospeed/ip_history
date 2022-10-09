@@ -29,7 +29,7 @@ This project is a WIP so this list may be expanded, but to this day I have worke
   
 ## Setup
 
-There is an additional part for setup which is IP_History_web(https://github.com/Meganitrospeed/ip_history_web) which is a GUI made in Ionic+React for the easy visualisation of the recollected data
+There is an additional part for setup which is [IP_History_web](https://github.com/Meganitrospeed/ip_history_web) which is a GUI made in Ionic+React for the easy visualisation of the recollected data
 
 Steps:
  - Get an API Token from ipinfo.io
@@ -38,7 +38,7 @@ Steps:
  - Add the DB credentials in prisma/schema.prisma
  - Run the project!
  
- Suggestions: If you want to run this to recollect data/in a production environment, pair it with something like NSSM(https://nssm.cc/)
+ Suggestions: If you want to run this to recollect data/in a production environment, pair it with something like [NSSM](https://nssm.cc/)
 
 ## 📜 License
 
