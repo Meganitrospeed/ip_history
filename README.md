@@ -33,7 +33,7 @@ There is an additional part for setup which is [IP_History_web](https://github.c
 
 Steps:
  - Get an API Token from ipinfo.io
- - Ensure you have installed: NodeJS and a working MariaDB server
+ - Ensure you have installed: NodeJS and a working Postgre server
  - Add the token in app.js in line 33
  - Add the DB credentials in prisma/schema.prisma
  - Run npm prisma migrate
