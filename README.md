@@ -36,7 +36,7 @@ Steps:
  - Ensure you have installed: NodeJS and a working Postgre server
  - Add the token in app.js in line 33
  - Add the DB credentials in prisma/schema.prisma
- - Run npm prisma migrate
+ - Run npm instal and npm prisma migrate
  - Run the project!
  
  Suggestions: If you want to run this to recollect data/in a production environment, pair it with something like [NSSM](https://nssm.cc/)
