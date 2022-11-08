@@ -1,3 +1,4 @@
+const dotenv = require('dotenv')
 //Web client part
 const axios = require('axios').default;
 //DB Handling part (with awesome PrismDB <3)
@@ -8,6 +9,7 @@ const express = require('express')
 const app = express()
 const port = 3001
 const cors = require('cors')
+var bodyParser = require('body-parser')
 var datainfo = prisma.ip.findMany()
 //Cron part
 var CronJob = require('cron').CronJob;
@@ -16,11 +18,35 @@ var corsOptions = {
     origin: "http://localhost:8100"
 };
 
+//Random stuff, mostly for easier working/eaesthetic
+var colors = require('colors');
+
+
+
 app.use(cors(corsOptions));
 //I dont like this approach as its 1 request = db lookup, tried to do it with a function that got updated
 //with the cronjob, but didnt work the way I expected to, need more work here
 app.get('/data', async function (req, res) {
         res.json(await prisma.ip.findMany());
+})
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+//Handles IP delete based on Basic auth
+app.post('/delete', async (req, res) => {
+    auth =  (new Buffer(req.get('authorization').split(' ')[1], "base64")).toString('ascii')
+    username = auth.split(":")[0]
+    password = auth.split(":")[1]
+    console.log("Authentication returned " + await authentication(username,password))
+    if (await authentication(username,password) === true){
+        const dataworking = await prisma.ip.delete({
+            where: {
+                ip: (req.body.ip).toString(),
+            },
+        })
+        res.sendStatus(200);
+        console.log((req.body.ip + " has been deleted by " + username).brightRed)
+    }
 })
 
 app.listen(port, () => {
@@ -30,7 +56,7 @@ app.listen(port, () => {
 axiosreq();
 //An API toke is needed from ipinfo.io
 function axiosreq (){
-    axios.get('https://ipinfo.io?token=').then(function (response) {
+    axios.get('https://ipinfo.io?token=' + process.env.IPINFO_TOKEN).then(function (response) {
         // The API call was successful!
         //console.log(response.data);
         //log(response.data);
@@ -40,6 +66,7 @@ function axiosreq (){
         console.warn('Something went wrong.', err);
     });
 }
+
 
 
  async function log(data){
@@ -81,6 +108,22 @@ async function check(data){
                 }
             },
         })
+    }
+}
+async function authentication (username,password){
+    const user = await prisma.user.findUnique({
+        where: {
+            username: username,
+        },
+    })
+
+    console.log(user.username);
+    if (password === user.password){
+        console.log("Sucessfull login attempt for" + username)
+        return true
+    }else{
+        console.log("Failed login attempt for " + username)
+        return false
     }
 }
 
