@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:CONTRASEÑA INSERTAR AQUI@localhost:5432/ip_history"
+  url      = "postgresql://postgres:Lyoko5Code@localhost:5432/ip_history"
 }
 
 model Ip {
@@ -16,4 +16,11 @@ model Ip {
   ip        String   @db.VarChar(32) @unique
   city      String   @default("unknown")
   seen      Int      @default(0)
+  }
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  username  String   @db.VarChar(32) @unique
+  password  String   @default("tester")
   }
