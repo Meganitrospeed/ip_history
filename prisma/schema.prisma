@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:Lyoko5Code@localhost:5432/ip_history"
+  url      = "postgresql://postgres:process.env.DATA_PASSWORD@localhost:5432/ip_history"
 }
 
 model Ip {
