@@ -63,3 +63,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 [![Download Latest mac](https://img.shields.io/badge/Download-mac-brightgreen)](./dist/app-mac)
 [![Download Latest win](https://img.shields.io/badge/Download-win-brightgreen)](./dist/app-win)
 [![Download Latest Linux](https://img.shields.io/badge/Download-Linux-brightgreen)](./dist/app-linux)
+[![Download Latest Linux](https://img.shields.io/badge/Download-Linux-brightgreen)](./dist/app-linux)
+[![Download Latest Windows](https://img.shields.io/badge/Download-Windows-brightgreen)](./dist/app-win)
+[![Download Latest macOS](https://img.shields.io/badge/Download-macOS-brightgreen)](./dist/app-mac)
