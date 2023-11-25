@@ -146,3 +146,4 @@ process.on('SIGINT', () => {
     // Exit the application
     process.exit();
 });
+
