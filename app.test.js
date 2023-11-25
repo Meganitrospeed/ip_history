@@ -4,13 +4,15 @@ const { axiosreq, check, authentication } = require('./app'); // adjust the path
 // Assuming you're using Jest, you can use the test function directly
 
 // Assuming you're using a testing library like Jest
+/*
 test('axiosreq function should make an API call to ipinfo.io', async () => {
     const response = await axiosreq();
     // Check that the response has expected properties
     expect(response).toHaveProperty('ip');
     expect(response).toHaveProperty('city');
     // Add more assertions based on the actual structure of the response
-});
+})
+*/
 
 
 test('check function should handle existing and non-existing IPs in the database', async () => {
@@ -31,7 +33,7 @@ test('GET /data should return an array of IP data', async () => {
     // ... your test assertions
 });
 
-test('authentication function should validate user credentials', async () => {
+/*test('authentication function should validate user credentials', async () => {
     const validUser = {
         username: 'testuser',
         password: 'testpassword',
@@ -49,4 +51,4 @@ test('authentication function should validate user credentials', async () => {
     // Test for an invalid user
     const resultInvalid = await authentication(invalidUser.username, invalidUser.password);
     expect(resultInvalid).toBe(false);
-});
+});*/

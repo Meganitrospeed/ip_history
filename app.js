@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
 //Web server part
 const express = require('express')
 const app = express()
-const port = 3001
+const port = 3002
 const cors = require('cors')
 var bodyParser = require('body-parser')
 var datainfo = prisma.ip.findMany()
@@ -47,7 +47,7 @@ app.post('/delete', async (req, res) => {
         console.log((req.body.ip + " has been deleted by " + username).brightRed)
     }
 })
-
+//Need to rework to post to an API Key Server for the OpenPublic version
 app.listen(port, () => {
     console.log(`JSON endpoint started at port  ${port}`)
 })
@@ -147,3 +147,9 @@ process.on('SIGINT', () => {
     process.exit();
 });
 
+module.exports = {
+    axiosreq,
+    check,
+    authentication,
+    // ... (other exports)
+};
