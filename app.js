@@ -15,7 +15,7 @@ var datainfo = prisma.ip.findMany()
 var CronJob = require('cron').CronJob;
 
 var corsOptions = {
-    origin: "http://localhost:8100"
+    origin: "http://localhost:4200"
 };
 
 //Random stuff, mostly for easier working/eaesthetic
@@ -128,7 +128,7 @@ async function authentication (username,password){
 }
 
 var job = new CronJob(
-    '* * 20 * * *',
+    '0 0 20 * * *',
     async function() {
         console.log('Cronjob has been executed');
         axiosreq();
@@ -138,3 +138,11 @@ var job = new CronJob(
     true,
     'Atlantic/Canary'
 );
+process.on('SIGINT', () => {
+    console.log('\nReceived SIGINT. Gracefully shutting down...');
+
+    // Perform cleanup or other shutdown tasks here
+
+    // Exit the application
+    process.exit();
+});
