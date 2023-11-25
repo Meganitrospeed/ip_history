@@ -5,36 +5,94 @@ on:
   fork:
 
 jobs:
-  build:
+  build-linux:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        os: [linux, win, mac]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run build and package for Linux
+        run: npx pkg app.js --output dist/app-linux
+
+      - name: Generate badge links
+        run: |
+          echo "[![Download Latest Linux](https://img.shields.io/badge/Download-Linux-brightgreen)](./dist/app-linux)" >> README.md
+
+      - name: Commit and push changes
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add README.md dist/app-linux
+          git commit -m "Build and package for Linux"
+          git push
+
+  build-win:
+    runs-on: windows-latest
+    needs: build-linux
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '16'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Run build and package
-      run: npx pkg app.js --output dist/app-${{ matrix.os }}
+      - name: Run build and package for Windows
+        run: npx pkg app.js --output dist/app-win
 
-    - name: Generate badge links
-      run: |
-        echo "[![Download Latest ${{ matrix.os }}](https://img.shields.io/badge/Download-${{ matrix.os }}-brightgreen)](./dist/app-${{ matrix.os }})" >> README.md
+      - name: Generate badge links
+        run: |
+          echo "[![Download Latest Windows](https://img.shields.io/badge/Download-Windows-brightgreen)](./dist/app-win)" >> README.md
 
-    - name: Commit and push changes
-      run: |
-        git config user.email "actions@github.com"
-        git config user.name "GitHub Actions"
-        git add README.md dist/app-${{ matrix.os }}
-        git commit -m "Build and package for ${{ matrix.os }}"
-        git push
+      - name: Commit and push changes
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add README.md dist/app-win
+          git commit -m "Build and package for Windows"
+          git push
+
+  build-mac:
+    runs-on: macos-latest
+    needs: build-win
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run build and package for macOS
+        run: npx pkg app.js --output dist/app-mac
+
+      - name: Generate badge links
+        run: |
+          echo "[![Download Latest macOS](https://img.shields.io/badge/Download-macOS-brightgreen)](./dist/app-mac)" >> README.md
+
+      - name: Commit and push changes
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add README.md dist/app-mac
+          git commit -m "Build and package for macOS"
+          git push
