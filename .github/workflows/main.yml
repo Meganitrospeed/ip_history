@@ -1,5 +1,3 @@
-name: Build and Package
-
 on:
   push:
   fork:
@@ -68,6 +66,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Remove old badge lines
+        run: sed -i '/\[!\[Download Latest/ {/^\s*$/!d}' README.md
 
       - name: Generate badge links and push changes
         run: |
