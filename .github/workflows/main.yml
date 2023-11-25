@@ -33,7 +33,7 @@ jobs:
 
     - name: Generate and commit badge links
       run: |
-        echo "[![Download Latest ${matrix.os}](https://img.shields.io/badge/Download-${matrix.os}-brightgreen)](./dist/app-${matrix.os})" >> README.md
+        echo "[![Download Latest ${{ matrix.os }}](https://img.shields.io/badge/Download-${{ matrix.os }}-brightgreen)](./dist/app-${{ matrix.os }})" >> README.md
         git config --local user.email "actions@github.com"
         git config --local user.name "GitHub Actions"
         git add README.md
