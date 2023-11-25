@@ -2,7 +2,7 @@ const dotenv = require('dotenv')
 //Web client part
 const axios = require('axios').default;
 //DB Handling part (with awesome PrismDB <3)
-const { PrismaClient } = require('@prisma/client')
+const {PrismaClient} = require('@prisma/client')
 const prisma = new PrismaClient()
 //Web server part
 const express = require('express')
@@ -22,23 +22,22 @@ var corsOptions = {
 var colors = require('colors');
 
 
-
 app.use(cors(corsOptions));
 //I dont like this approach as its 1 request = db lookup, tried to do it with a function that got updated
 //with the cronjob, but didnt work the way I expected to, need more work here
 app.get('/data', async function (req, res) {
-        res.json(await prisma.ip.findMany());
+    res.json(await prisma.ip.findMany());
 })
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 //Handles IP delete based on Basic auth
 app.post('/delete', async (req, res) => {
-    auth =  (new Buffer(req.get('authorization').split(' ')[1], "base64")).toString('ascii')
+    auth = (new Buffer(req.get('authorization').split(' ')[1], "base64")).toString('ascii')
     username = auth.split(":")[0]
     password = auth.split(":")[1]
-    console.log("Authentication returned " + await authentication(username,password))
-    if (await authentication(username,password) === true){
+    console.log("Authentication returned " + await authentication(username, password))
+    if (await authentication(username, password) === true) {
         const dataworking = await prisma.ip.delete({
             where: {
                 ip: (req.body.ip).toString(),
@@ -54,8 +53,9 @@ app.listen(port, () => {
 })
 //Execute once on app start and then we let the rest to the cron
 axiosreq();
+
 //An API toke is needed from ipinfo.io
-function axiosreq (){
+function axiosreq() {
     axios.get('https://ipinfo.io?token=' + process.env.IPINFO_TOKEN).then(function (response) {
         // The API call was successful!
         //console.log(response.data);
@@ -68,18 +68,17 @@ function axiosreq (){
 }
 
 
-
- async function log(data){
+async function log(data) {
     const newUser = await prisma.ip.create({
         data: {
             ip: data.ip,
             city: data.city,
         },
     })
-     console.log("logged new data");
- }
+    console.log("logged new data");
+}
 
-async function check(data){
+async function check(data) {
     const ip = await prisma.ip.findUnique({
         where: {
             ip: data.ip,
@@ -88,16 +87,16 @@ async function check(data){
     console.log(ip);
     //This took me way too long to get, but I was getting a TypeSet error because I was trying to see json properties of a null "ip.seen" but the object IP itself was a null as such the conditional ip.seen === null was throwing an error
     //Needed to fix this piece since I didnt check at the begining if ip.seen as null/undefined and it failed if an IP was not in DB before running
-    if (ip === null){
+    if (ip === null) {
         console.log("IP not seen before, registering " + data.ip + " because null object")
         log(data)
 
-    }else if (ip === undefined) {
+    } else if (ip === undefined) {
         console.log("IP not seen before, registering " + data.ip + "because undefined")
         log(data);
-    }else{
+    } else {
 
-        console.log("IP seen before, updating count for " + data.ip +" , current count is " + ip.seen)
+        console.log("IP seen before, updating count for " + data.ip + " , current count is " + ip.seen)
         const updateUser = await prisma.ip.update({
             where: {
                 ip: data.ip,
@@ -110,7 +109,8 @@ async function check(data){
         })
     }
 }
-async function authentication (username,password){
+
+async function authentication(username, password) {
     const user = await prisma.user.findUnique({
         where: {
             username: username,
@@ -118,10 +118,10 @@ async function authentication (username,password){
     })
 
     console.log(user.username);
-    if (password === user.password){
+    if (password === user.password) {
         console.log("Sucessfull login attempt for" + username)
         return true
-    }else{
+    } else {
         console.log("Failed login attempt for " + username)
         return false
     }
@@ -129,7 +129,7 @@ async function authentication (username,password){
 
 var job = new CronJob(
     '0 0 20 * * *',
-    async function() {
+    async function () {
         console.log('Cronjob has been executed');
         axiosreq();
         //jsondata();
@@ -139,7 +139,7 @@ var job = new CronJob(
     'Atlantic/Canary'
 );
 process.on('SIGINT', () => {
-    console.log('\nReceived SIGINT. Gracefully shutting down...');
+    console.log('\nShutting down...');
 
     // Perform cleanup or other shutdown tasks here
 
