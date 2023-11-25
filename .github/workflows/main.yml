@@ -1,6 +1,13 @@
-name: Build and Package
+name: Build, Package, and Expose Artifacts
 
-on: [push, fork]
+on:
+  push:
+    branches:
+      - main
+  workflow_run:
+    workflows: ["Build and Package"]
+    types:
+      - completed
 
 jobs:
   build:
@@ -25,8 +32,51 @@ jobs:
     - name: Run build and package
       run: npx pkg app.js --output dist/app-${{ matrix.os }}
 
-    - name: Upload pkg to binaries folder
+  upload:
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+    - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
         name: pkg-artifact-${{ matrix.os }}
         path: dist/app-${{ matrix.os }}
+
+  download:
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+    - name: Download latest artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: pkg-artifact-linux
+        path: dist-linux
+
+    - name: Display artifact information
+      run: |
+        echo "Downloaded latest artifacts:"
+        ls -l dist-linux
+
+  update-readme:
+    runs-on: ubuntu-latest
+
+    needs: download
+
+    steps:
+    - name: Generate badge links
+      run: |
+        echo "[![Download Latest Linux](https://img.shields.io/badge/Download-Linux-brightgreen)](./dist-linux/app-linux)" >> README.md
+        echo "[![Download Latest Windows](https://img.shields.io/badge/Download-Windows-brightgreen)](./dist-win/app-win)" >> README.md
+        echo "[![Download Latest Mac](https://img.shields.io/badge/Download-Mac-brightgreen)](./dist-mac/app-mac)" >> README.md
+
+    - name: Commit and push changes to README
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add README.md
+        git commit -m "Update README with latest artifact links"
+        git push
