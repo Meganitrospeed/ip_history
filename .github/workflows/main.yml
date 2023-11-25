@@ -37,5 +37,5 @@ jobs:
         git config --local user.email "actions@github.com"
         git config --local user.name "GitHub Actions"
         git add README.md
-        git commit -m "Add badge link for ${matrix.os}"
+        git commit -m "Add badge link for ${{ matrix.os }}"
         git push
