@@ -2,8 +2,7 @@ name: Run JEST Tests
 
 on:
   push:
-    branches:
-      - main
+  fork:
 
 jobs:
   test:
