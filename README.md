@@ -56,3 +56,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ## Downloads
 
 Here are the download badges pointing to the latest version
+[![Download Latest Linux](https://img.shields.io/badge/Download-Linux-brightgreen)](./dist/app-linux)
+[![Download Latest Windows](https://img.shields.io/badge/Download-Windows-brightgreen)](./dist/app-win)
+[![Download Latest macOS](https://img.shields.io/badge/Download-macOS-brightgreen)](./dist/app-mac)
