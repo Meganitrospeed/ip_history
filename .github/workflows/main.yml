@@ -18,5 +18,7 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Run build and package
-      run: npx pkg app.js
+    - name: Package into node binary
+       uses: lando/pkg-action@v3
+       with:
+       entrypoint: app.js
