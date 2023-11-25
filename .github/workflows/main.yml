@@ -21,4 +21,4 @@ jobs:
     - name: Package into node binary
        uses: lando/pkg-action@v3
        with:
-       entrypoint: app.js
+         entrypoint: app.js
