@@ -1,6 +1,8 @@
 name: Build and Package
 
-on: [push, fork]
+on:
+  push:
+  fork:
 
 jobs:
   build:
@@ -25,18 +27,14 @@ jobs:
     - name: Run build and package
       run: npx pkg app.js --output dist/app-${{ matrix.os }}
 
-    - name: Upload pkg to binaries folder
-      uses: actions/upload-artifact@v2
-      with:
-        name: pkg-artifact-${{ matrix.os }}
-        path: dist/app-${{ matrix.os }}
-
-    - name: Generate and commit badge links
+    - name: Generate badge links
       run: |
-        git config --local user.email "actions@github.com"
-        git config --local user.name "GitHub Actions"
-        git pull origin master
         echo "[![Download Latest ${{ matrix.os }}](https://img.shields.io/badge/Download-${{ matrix.os }}-brightgreen)](./dist/app-${{ matrix.os }})" >> README.md
-        git add README.md
-        git commit -m "Add badge link for ${{matrix.os}}"
-        git push --force
+
+    - name: Commit and push changes
+      run: |
+        git config user.email "actions@github.com"
+        git config user.name "GitHub Actions"
+        git add README.md dist/app-${{ matrix.os }}
+        git commit -m "Build and package for ${{ matrix.os }}"
+        git push
