@@ -23,18 +23,6 @@ jobs:
       - name: Run build and package for Linux
         run: npx pkg app.js --output dist/app-linux
 
-      - name: Generate badge links
-        run: |
-          echo "[![Download Latest Linux](https://img.shields.io/badge/Download-Linux-brightgreen)](./dist/app-linux)" >> README.md
-
-      - name: Commit and push changes
-        run: |
-          git config user.email "actions@github.com"
-          git config user.name "GitHub Actions"
-          git add README.md dist/app-linux
-          git commit -m "Build and package for Linux"
-          git push
-
   build-win:
     runs-on: windows-latest
     needs: build-linux
@@ -53,18 +41,6 @@ jobs:
 
       - name: Run build and package for Windows
         run: npx pkg app.js --output dist/app-win
-
-      - name: Generate badge links
-        run: |
-          echo "[![Download Latest Windows](https://img.shields.io/badge/Download-Windows-brightgreen)](./dist/app-win)" >> README.md
-
-      - name: Commit and push changes
-        run: |
-          git config user.email "actions@github.com"
-          git config user.name "GitHub Actions"
-          git add README.md dist/app-win
-          git commit -m "Build and package for Windows"
-          git push
 
   build-mac:
     runs-on: macos-latest
@@ -85,14 +61,22 @@ jobs:
       - name: Run build and package for macOS
         run: npx pkg app.js --output dist/app-mac
 
-      - name: Generate badge links
+  push:
+    runs-on: ubuntu-latest
+    needs: [build-linux, build-win, build-mac]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate badge links and push changes
         run: |
+          echo "[![Download Latest Linux](https://img.shields.io/badge/Download-Linux-brightgreen)](./dist/app-linux)" >> README.md
+          echo "[![Download Latest Windows](https://img.shields.io/badge/Download-Windows-brightgreen)](./dist/app-win)" >> README.md
           echo "[![Download Latest macOS](https://img.shields.io/badge/Download-macOS-brightgreen)](./dist/app-mac)" >> README.md
 
-      - name: Commit and push changes
-        run: |
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
-          git add README.md dist/app-mac
-          git commit -m "Build and package for macOS"
+          git add README.md dist/
+          git commit -m "Update badge links and artifacts"
           git push
