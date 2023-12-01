@@ -39,7 +39,7 @@ Steps:
  - Run npm instal and npm prisma migrate
  - Run the project!
  
- Suggestions: If you want to run this to recollect data/in a production environment, pair it with something like [NSSM](https://nssm.cc/)
+WIP  Suggestions: If you want to run this to recollect data/in a production environment, pair it with something like [NSSM](https://nssm.cc/)
 
 ## 📜 License
 
